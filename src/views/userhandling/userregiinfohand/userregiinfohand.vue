@@ -191,25 +191,13 @@ const gridEvents: VxeGridListeners = {
 findList()
 
 const showAllAccounts = () => {
-	loading.value = true
+	gridOptions.loading = true
 	ForAllAccount({ skip: 10, page: 1 }).then((res) => {
-		loading.value = false
-
-		if (res.data == 'no result') {
-			ElMessage({
-				message: '暂无账号~',
-				type: 'warning',
-				showClose: true,
-			})
-		} else if (res.data == 'ERROR') {
-			ElMessage({
-				message: '后台出错~',
-				type: 'error',
-				showClose: true,
-			})
-		} else {
-			tableData.value = res.data.pagination
-		}
+		tablePage.currentPage = 1
+		tablePage.pageSize = 10
+		gridOptions.loading = false;
+		gridOptions.data = res.data.pagination;
+		tablePage.total = res.data.accNum
 	})
 }
 
