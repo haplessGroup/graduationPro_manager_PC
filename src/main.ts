@@ -25,11 +25,12 @@ import {
   VxeTable,
   VXETable,
   VxeTooltip,
-} from 'vxe-table'
+} from "vxe-table";
 import zhCN from 'vxe-table/es/locale/lang/zh-CN'
 import 'xe-utils'
 import XEUtils from 'xe-utils'
 import App from './App.vue'
+import "./index.css";
 import router from './router'
 
 const pinia = createPinia()

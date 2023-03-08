@@ -23,17 +23,17 @@
         </template>
         <template #sex_edit="{ row }">
             <vxe-select v-model="row.sex" transfer>
-                <vxe-option v-for="item in sexList1" :key="item.value" :value="item.value"
-                    :label="item.label"></vxe-option>
-            </vxe-select>
-        </template>
-        <template #role_edit="{ row }">
-            <vxe-input v-model="row.role"></vxe-input>
-        </template>
-        <template #describe_edit="{ row }">
-            <vxe-input v-model="row.describe"></vxe-input>
-        </template>
-    </vxe-grid>
+                    <vxe-option v-for="item in sexList1" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+                </vxe-select>
+            </template>
+            <template #role_edit="{ row }">
+                <vxe-input v-model="row.role"></vxe-input>
+            </template>
+            <template #describe_edit="{ row }">
+                <vxe-input v-model="row.describe"></vxe-input>
+            </template>
+        </vxe-grid>
+        <div style="height: 100px;width: 100px;background-color: aqua;" class="fixed invisible"></div>
 </template>
 
 <script lang="ts" >
@@ -172,5 +172,4 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-
 </style>

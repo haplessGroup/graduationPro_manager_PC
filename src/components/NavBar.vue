@@ -50,16 +50,40 @@ function handleCommand(command) {
       break;
   }
 }
-
+const removeAdminTokenAndAdmininfo = () => {
+  ElMessageBox.confirm(
+    '确定注销登录吗?',
+    '注销登录',
+    {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  )
+    .then(() => {
+      ElMessage({
+        type: 'success',
+        message: '注销成功!',
+      })
+      localStorage.removeItem("admintoken")
+      setTimeout(() => {
+        location.reload()
+      }, 1000)
+    })
+  // localStorage.removeItem("adminginfo")
+  // console.log("注销按钮被点击了")
+  // console.log(this.adminInfo.nickname)
+}
 function logout() {
+
   ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    userStore.logOut().then(() => {
-      location.href = '/index';
-    })
+    location.href = '/index';
+    // userStore.logOut().then(() => {
+    // })
   }).catch(() => { });
 }
 

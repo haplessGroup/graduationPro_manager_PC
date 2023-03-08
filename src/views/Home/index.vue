@@ -2,10 +2,7 @@
 	<!-- 标题 -->
 	<div id="header" style="font-size: 30px;font-weight: bold;text-align: center;color: #708090;">
 		欢迎来到"零数据"分析平台管理系统
-	</div>
-	<div id="posi" style="font-size: 10px;">
-		当前位置:首页
-	</div>
+		</div>
 	<!-- 分割线 -->
 	<el-divider></el-divider>
 	<!-- 四个板块 -->
@@ -25,7 +22,7 @@
 		</div>
 	</div>
 	<!-- 用户注册量 -->
-	<div id="hi" style="text-align: center;margin-top: 20px;">
+	<div id="hi" style="text-align: center;" class="mt-20px">
 		<div class="data">
 			<h2 class="tit">一周用户注册量</h2>
 			<el-divider></el-divider>

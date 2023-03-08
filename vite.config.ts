@@ -28,6 +28,7 @@ export default defineConfig({
         additionalData: `@import "@/styles/them.scss";`,
       },
     },
+
   },
   resolve: {
     // 配置路径别名

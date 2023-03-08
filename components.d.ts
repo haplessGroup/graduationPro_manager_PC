@@ -40,6 +40,7 @@ declare module '@vue/runtime-core' {
     Hamburger: typeof import('./src/components/Hamburger/index.vue')['default']
     HeaderSearch: typeof import('./src/components/HeaderSearch/index.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    Logo: typeof import('./src/components/Logo/Logo.vue')['default']
     NavBar: typeof import('./src/components/NavBar.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

@@ -1,6 +1,9 @@
 import layout from "@/layout/index.vue";
 import { ElMessage } from "element-plus";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+// router/index.ts
+import { close, start } from "@/utils/nporgress";
+
 const routers: RouteRecordRaw[] = [
   // 路由重定向，当访问的路径不存在或只输入域名时，重定向到Login
   {
@@ -102,6 +105,13 @@ const auth = [
   "/prolanguage",
   "/hottravelcity",
 ];
+router.beforeEach((pre, next) => {
+  start();
+});
+
+router.afterEach(() => {
+  close();
+});
 router.beforeEach((to, from, next) => {
   if (auth.includes(to.fullPath)) {
     let token = localStorage.getItem("admintoken");
