@@ -7,7 +7,7 @@ import { defineConfig } from 'vite'
 import {
   createStyleImportPlugin,
   VxeTableResolve,
-} from 'vite-plugin-style-import'
+} from "vite-plugin-style-import";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -32,10 +32,10 @@ export default defineConfig({
   resolve: {
     // 配置路径别名
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      "@": path.resolve(__dirname, "src"),
     },
   },
   build: {
-    target: 'es2015',
+    target: "es2015",
   },
-})
+});

@@ -1,52 +1,41 @@
 <template>
-	<div style="font-size: 10px;margin-top: -10px;">当前位置:用户信息处理>>用户账号处理</div>
-	<!-- 用户建议数据展示 -->
-	<div>
-		<el-card style="height: 100%;overflow: hidden;" class="box-card">
+		<!-- 表格 -->
+		<vxe-grid v-bind="gridOptions" v-on="gridEvents">
+			<template #account_item="{ data }">
+				<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
+			</template>
+			<template #status_item="{ data }">
+				<vxe-select v-model="data.status" transfer>
+					<vxe-option v-for="item in options1" :key="item.value" :value="item.value" :label="item.label">
+					</vxe-option>
+				</vxe-select>
+			</template>
+			<template #operate_item>
+				<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
+				<vxe-button type="reset" content="重置" @click="showAllAccounts()"></vxe-button>
+			</template>
+			<template #pager>
+				<vxe-pager :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
+					v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize" :total="tablePage.total"
+					@page-change="handlePageChange">
+				</vxe-pager>
+			</template>
+			<template #operate="{ row }">
+				<vxe-button type="text" status="primary" content="提交" @click="submitData(row)"></vxe-button>
+			</template>
+			<template #accstatus_edit="{ row }">
 
-			<!-- 表格 -->
-			<vxe-grid v-bind="gridOptions" v-on="gridEvents">
-				<template #account_item="{ data }">
-					<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
-				</template>
-				<template #status_item="{ data }">
-					<vxe-select v-model="data.status" transfer>
-						<vxe-option v-for="item in options1" :key="item.value" :value="item.value" :label="item.label">
-						</vxe-option>
-					</vxe-select>
-				</template>
-				<template #operate_item>
-					<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
-					<vxe-button type="reset" content="重置" @click="showAllAccounts()"></vxe-button>
-				</template>
-				<template #pager>
-					<vxe-pager
-						:layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
-						v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize"
-						:total="tablePage.total" @page-change="handlePageChange">
-					</vxe-pager>
-				</template>
-				<template #operate="{ row }">
-					<vxe-button type="text" status="primary" content="提交" @click="submitData(row)"></vxe-button>
-				</template>
-				<template #accstatus_edit="{ row }">
+				<vxe-select v-model="row.accstatus" transfer>
+					<vxe-option v-for="item in options1" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+				</vxe-select>
+			</template>
+			<template #isloginallowed_edit="{ row }">
 
-					<vxe-select v-model="row.accstatus" transfer>
-						<vxe-option v-for="item in options1" :key="item.value" :value="item.value"
-							:label="item.label"></vxe-option>
-					</vxe-select>
-				</template>
-				<template #isloginallowed_edit="{ row }">
-
-					<vxe-select v-model="row.isloginallowed" transfer>
-						<vxe-option v-for="item in options2" :key="item.value" :value="item.value"
-							:label="item.label"></vxe-option>
-					</vxe-select>
-				</template>
-			</vxe-grid>
-		</el-card>
-	</div>
-
+				<vxe-select v-model="row.isloginallowed" transfer>
+					<vxe-option v-for="item in options2" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+				</vxe-select>
+			</template>
+		</vxe-grid>
 </template>
 <script lang="ts" setup>
 import { ForAllAccount, updateAccount } from '@/services/api/user';

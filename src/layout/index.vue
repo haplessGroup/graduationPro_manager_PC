@@ -1,15 +1,19 @@
 <template>
-    <el-container style="background-color: #F5F5F5;height: 100vh;">
-        <el-aside style="width: 220px;">
-            <div>
+            <el-container style="height: 100vh;">
+              <div>
                 <SideNaviBar></SideNaviBar>
-            </div>
-        </el-aside>
-        <el-main>
-            <router-view />
-        </el-main>
+              </div>
+              <el-container>
+                <el-header style="padding: 0;">
+                  <NavBar />
+                </el-header>
+                <el-main>
+                  <router-view />
+                </el-main>
+              </el-container>
     </el-container>
 </template>
 <script lang="ts" setup>
+import NavBar from '@/components/NavBar.vue';
 import SideNaviBar from '@/components/sideNaviBar.vue';
 </script>

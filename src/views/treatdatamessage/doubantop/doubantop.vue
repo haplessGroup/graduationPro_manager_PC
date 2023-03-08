@@ -1,11 +1,5 @@
 <template>
 
-	<div style="font-size: 10px;margin-top: -10px;">
-		当前位置:用户留言处理>>豆瓣电影排行
-	</div>
-	<div>
-		<el-card style="height: 100%;overflow: hidden;" class="box-card">
-			<!-- 表格 -->
 			<vxe-grid v-bind="gridOptions" v-on="gridEvents">
 				<template #account_item="{ data }">
 					<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
@@ -33,10 +27,7 @@
 				<template #dbtime_slot="{ row }">
 					<span>{{ timeFormatSeconds(row.dbtime) }}</span>
 				</template>
-			</vxe-grid>
-		</el-card>
-	</div>
-
+				</vxe-grid>
 </template>
 <script lang="ts" setup>
 import { deleteMovieMessage, ForDoubanMessage } from '@/services/api/data';

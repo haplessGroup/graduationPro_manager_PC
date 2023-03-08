@@ -1,41 +1,32 @@
 <template>
-	<div style="font-size: 10px;margin-top: -10px;">
-		当前位置:用户留言处理>>热门旅游城市推荐
-	</div>
-	<div>
-		<el-card style="height: 100%;overflow: hidden;" class="box-card">
-			<!-- 表格 -->
-			<vxe-grid v-bind="gridOptions" v-on="gridEvents">
-				<template #account_item="{ data }">
-					<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
-				</template>
-				<template #status_item="{ data }">
-					<vxe-select v-model="data.status" transfer>
-						<vxe-option v-for="item in options1" :key="item.value" :value="item.value" :label="item.label">
-						</vxe-option>
-					</vxe-select>
-				</template>
-				<template #operate_item>
-					<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
-					<vxe-button type="reset" content="重置" @click="showAllAccounts()"></vxe-button>
-				</template>
-				<template #pager>
-					<vxe-pager
-						:layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
-						v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize"
-						:total="tablePage.total" @page-change="handlePageChange">
-					</vxe-pager>
-				</template>
-				<template #operate="{ row }">
-					<vxe-button type="text" status="primary" content="删除" @click="deleteDate(row)"></vxe-button>
-				</template>
-				<template #traveltime_slot="{ row }">
-					<span>{{ timeFormatSeconds(row.traveltime) }}</span>
-				</template>
-			</vxe-grid>
-		</el-card>
-	</div>
-
+		<!-- 表格 -->
+		<vxe-grid v-bind="gridOptions" v-on="gridEvents">
+			<template #account_item="{ data }">
+				<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
+			</template>
+			<template #status_item="{ data }">
+				<vxe-select v-model="data.status" transfer>
+					<vxe-option v-for="item in options1" :key="item.value" :value="item.value" :label="item.label">
+					</vxe-option>
+				</vxe-select>
+			</template>
+			<template #operate_item>
+				<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
+				<vxe-button type="reset" content="重置" @click="showAllAccounts()"></vxe-button>
+			</template>
+			<template #pager>
+				<vxe-pager :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
+					v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize" :total="tablePage.total"
+					@page-change="handlePageChange">
+				</vxe-pager>
+			</template>
+			<template #operate="{ row }">
+				<vxe-button type="text" status="primary" content="删除" @click="deleteDate(row)"></vxe-button>
+			</template>
+			<template #traveltime_slot="{ row }">
+				<span>{{ timeFormatSeconds(row.traveltime) }}</span>
+			</template>
+		</vxe-grid>
 </template>
 <script lang="ts" setup>
 import { deleteCityMessage, ForHotTravelCityMessage } from '@/services/api/data';
@@ -174,5 +165,4 @@ const showAllAccounts = () => {
 
 
 <style>
-
 </style>

@@ -10,6 +10,7 @@ export const useAdminInfoStore = defineStore('adminInfo', {
   }),
   persist: true,
 })
+
 export interface AdminInfo {
   account: string
   nickname: string

@@ -90,7 +90,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
 				}
 				adminInfoStore.account = adminInfo.value.account
 				setTimeout(() => {
-					router.push("/home")
+					router.push({ name: 'Home' })
 				}, 2000)
 			})
 		} else {

@@ -1,10 +1,4 @@
 <template>
-
-	<div style="font-size: 10px;margin-top: -10px;">当前位置:用户信息处理>>用户注册信息处理</div>
-	<!-- 用户建议数据展示 -->
-	<div>
-		<el-card style="height: 100%; overflow: hidden" class="box-card">
-			<!-- 表格 -->
 			<vxe-grid show-overflow show-header-overflow show-footer-overflow :tooltip-config="tableTooltipConfig"
 				v-bind="gridOptions" v-on="gridEvents">
 				<template #account_item="{ data }">
@@ -46,10 +40,7 @@
 							:label="item.label"></vxe-option>
 					</vxe-select>
 				</template>
-			</vxe-grid>
-		</el-card>
-	</div>
-
+				</vxe-grid>
 </template>
 <script lang="ts" setup>
 import {

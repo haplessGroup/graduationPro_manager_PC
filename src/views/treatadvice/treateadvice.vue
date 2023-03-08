@@ -1,89 +1,74 @@
 <template>
-
-			<!-- 位置显示 -->
-			<div style="font-size: 10px;margin-top: -10px;">
-				当前位置:用户建议处理
-			</div>
-			<!-- 用户建议数据展示 -->
-
-			<el-card style="height: 100%;overflow: hidden;" class="box-card">
-				<!-- 表格 -->
-
-				<vxe-grid v-bind="gridOptions" v-on="gridEvents">
-					<template #account_item="{ data }">
-						<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
-					</template>
-					<template #status_item="{ data }">
-						<vxe-select v-model="data.status" transfer>
-							<vxe-option v-for="item in options" :key="item.value" :value="item.value"
-								:label="item.label">
-							</vxe-option>
-						</vxe-select>
-					</template>
-					<template #operate_item>
-						<vxe-button type="submit" status="primary" content="查询"></vxe-button>
-						<vxe-button type="reset" content="重置" @click="findList()"></vxe-button>
-					</template>
-					<template #pager>
-						<vxe-pager
-							:layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
-							v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize"
-							:total="tablePage.total" @page-change="handlePageChange">
-						</vxe-pager>
-					</template>
-					<template #operate="{ row }">
-						<vxe-button type="text" status="primary" content="去处理" @click="open(row)"></vxe-button>
-					</template>
-				</vxe-grid>
-
-				<!-- 抽屉效果 -->
-				<div style="text-align: center;">
-					<el-drawer v-model="dialog" title="用户建议处理" direction="ltr" size="50%">
-						<div style="margin: 0 auto;width: 400px;">
-							<el-form :model="userinfo">
-								<el-form-item label="用户账号:" style="margin-left: 50px;">
-									<el-input v-model="userinfo.acc" style="width: 150px;" disabled />
-								</el-form-item>
-								<el-form-item label="用户昵称:" style="margin-left: 50px;">
-									<el-input v-model="userinfo.nic" style="width: 150px;" disabled />
-								</el-form-item>
-								<el-form-item label="用户QQ:" style="margin-left: 50px;">
-									<el-input v-model="userinfo.qq" style="width: 150px;" disabled />
-								</el-form-item>
-								<el-form-item label="用户邮箱:" style="margin-left: 50px;">
-									<el-input v-model="userinfo.ema" style="width: 150px;" disabled />
-								</el-form-item>
-								<el-form-item label="建议类别:" style="margin-left: 50px;">
-									<el-input v-model="userinfo.cate" style="width: 150px;" disabled />
-								</el-form-item>
-								<el-form-item label="用户建议:" style="margin-left: 50px;">
-									<el-input v-model="userinfo.adv" style="width: 150px;" disabled />
-								</el-form-item>
-								<el-form-item label="用户评分:" style="margin-left: 50px;">
-									<el-input v-model="userinfo.rat" style="width: 150px;" disabled />
-								</el-form-item>
-								<el-form-item label="建议状态:" style="margin-left: 50px;">
-									<el-select v-model="userinfo.statu" placeholder="请选择" style="width: 150px;">
-										<el-option label="待处理" value="待处理" />
-										<el-option label="已处理" value="已处理" />
-									</el-select>
-								</el-form-item>
-								<el-form-item label="管理回复:" style="margin-left: 50px;">
-									<el-input type="textarea" v-model="userinfo.re" style="width: 250px;" clearable
-										maxlength="255" placeholder="请输入回复内容...(最多255个字)" show-word-limit :rows="8" />
-								</el-form-item>
-								<el-form-item>
-									<el-button style="margin: 0 auto;" type="primary" @click="onSubmit">提交</el-button>
-								</el-form-item>
-							</el-form>
-						</div>
-					</el-drawer>
+		<vxe-grid v-bind="gridOptions" v-on="gridEvents">
+			<template #account_item="{ data }">
+				<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
+			</template>
+			<template #status_item="{ data }">
+				<vxe-select v-model="data.status" transfer>
+					<vxe-option v-for="item in options" :key="item.value" :value="item.value" :label="item.label">
+					</vxe-option>
+				</vxe-select>
+			</template>
+			<template #operate_item>
+				<vxe-button type="submit" status="primary" content="查询" @click="searchUser()"></vxe-button>
+				<vxe-button type="reset" content="重置" @click="findList()"></vxe-button>
+			</template>
+			<template #pager>
+				<vxe-pager :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
+					v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize" :total="tablePage.total"
+					@page-change="handlePageChange">
+				</vxe-pager>
+			</template>
+			<template #operate="{ row }">
+				<vxe-button type="text" status="primary" content="去处理" @click="open(row)"></vxe-button>
+			</template>
+		</vxe-grid>
+		<!-- 抽屉效果 -->
+		<div style="text-align: center;">
+			<el-drawer v-model="dialog" title="用户建议处理" direction="ltr" size="50%">
+				<div style="margin: 0 auto;width: 400px;">
+					<el-form :model="userinfo">
+						<el-form-item label="用户账号:" style="margin-left: 50px;">
+							<el-input v-model="userinfo.acc" style="width: 150px;" disabled />
+						</el-form-item>
+						<el-form-item label="用户昵称:" style="margin-left: 50px;">
+							<el-input v-model="userinfo.nic" style="width: 150px;" disabled />
+						</el-form-item>
+						<el-form-item label="用户QQ:" style="margin-left: 50px;">
+							<el-input v-model="userinfo.qq" style="width: 150px;" disabled />
+						</el-form-item>
+						<el-form-item label="用户邮箱:" style="margin-left: 50px;">
+							<el-input v-model="userinfo.ema" style="width: 150px;" disabled />
+						</el-form-item>
+						<el-form-item label="建议类别:" style="margin-left: 50px;">
+							<el-input v-model="userinfo.cate" style="width: 150px;" disabled />
+						</el-form-item>
+						<el-form-item label="用户建议:" style="margin-left: 50px;">
+							<el-input v-model="userinfo.adv" style="width: 150px;" disabled />
+						</el-form-item>
+						<el-form-item label="用户评分:" style="margin-left: 50px;">
+							<el-input v-model="userinfo.rat" style="width: 150px;" disabled />
+						</el-form-item>
+						<el-form-item label="建议状态:" style="margin-left: 50px;">
+							<el-select v-model="userinfo.statu" placeholder="请选择" style="width: 150px;">
+								<el-option label="待处理" value="待处理" />
+								<el-option label="已处理" value="已处理" />
+							</el-select>
+						</el-form-item>
+						<el-form-item label="管理回复:" style="margin-left: 50px;">
+							<el-input type="textarea" v-model="userinfo.re" style="width: 250px;" clearable maxlength="255"
+								placeholder="请输入回复内容...(最多255个字)" show-word-limit :rows="8" />
+						</el-form-item>
+						<el-form-item>
+							<el-button style="margin: 0 auto;" type="primary" @click="onSubmit">提交</el-button>
+						</el-form-item>
+					</el-form>
 				</div>
-			</el-card>
-
+			</el-drawer>
+		</div>
 </template>
 <script lang="ts" setup>
-import { ForAllAdvice, updatedAdvice } from '@/services/api/user';
+import { ForAccount, ForAllAdvice, updatedAdvice } from '@/services/api/user';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
@@ -104,7 +89,12 @@ const userinfo = reactive({
 	statu: "",
 	re: ""
 })
+const searchUser = async () => {
+	const result = await ForAccount({ key: gridOptions.formConfig?.data.account, skip: tablePage.pageSize, page: tablePage.currentPage, flag: 1 })
+	gridOptions.data = result.data.pagination
+	gridOptions.loading = false; tablePage.total = result.data.jynum
 
+}
 const socket = ref(null)
 // 调教筛选：建议处理状态
 
@@ -166,7 +156,6 @@ const gridOptions = reactive<VxeGridProps>({
 const findList = () => {
 	gridOptions.loading = true
 	ForAllAdvice({ skip: tablePage.pageSize, page: tablePage.currentPage }).then(res => {
-
 		gridOptions.data = res.data.pagination; gridOptions.loading = false; tablePage.total = res.data.jynum
 	})
 
@@ -178,7 +167,7 @@ const handlePageChange: VxePagerEvents.PageChange = ({ currentPage, pageSize }) 
 }
 const gridEvents: VxeGridListeners = {
 	formSubmit() {
-		findList()
+		searchUser()
 	}
 }
 
