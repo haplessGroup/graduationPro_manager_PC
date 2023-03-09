@@ -115,7 +115,6 @@ const findList = () => {
 
 	gridOptions.loading = true
 	ForDoubanMessage({ skip: tablePage.pageSize, page: tablePage.currentPage, ...gridOptions.formConfig?.data }).then(res => {
-
 		gridOptions.data = res.data.pagination; gridOptions.loading = false; tablePage.total = res.data.plnum
 	})
 
@@ -126,9 +125,7 @@ const handlePageChange: VxePagerEvents.PageChange = ({ currentPage, pageSize }) 
 	findList()
 }
 const gridEvents: VxeGridListeners = {
-	formSubmit() {
-		findList()
-	}
+
 }
 findList()
 

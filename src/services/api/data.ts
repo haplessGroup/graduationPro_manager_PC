@@ -1,4 +1,5 @@
 import request from '../request'
+//
 export function ForDoubanMessage(query: any) {
   return request({
     url: '/data/dbmoviemessage',

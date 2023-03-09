@@ -1,5 +1,5 @@
 <template>
-		<vxe-grid v-bind="gridOptions" v-on="gridEvents">
+		<vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents">
 			<template #account_item="{ data }">
 				<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
 			</template>
@@ -23,59 +23,88 @@
 				<vxe-button type="text" status="primary" content="去处理" @click="open(row)"></vxe-button>
 			</template>
 		</vxe-grid>
+		<vxe-modal v-model="dialog" title="处理留言" width="800" min-width="600" min-height="300" :esc-closable="true" resize
+			destroy-on-close>
+			<template #default>
+				<vxe-form :data="userinfo" title-align="right" title-width="100">
+					<vxe-form-item title="基础信息" title-align="left" :title-width="200" :span="24"
+						:title-prefix="{ icon: 'vxe-icon-comment' }"></vxe-form-item>
+
+					<vxe-form-item field="id" title="ID" :span="12" :item-render="{}">
+						<template #default="{ data }">
+							<vxe-input v-model="data.id" :disabled="true"></vxe-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item field="acc" title="用户账号" :span="12" :item-render="{}">
+						<template #default="{ data }">
+							<vxe-input v-model="data.acc" :disabled="true"></vxe-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item field="nic" title="用户昵称" :span="12" :item-render="{}">
+						<template #default="{ data }">
+							<vxe-input v-model="data.nic" :disabled="true"></vxe-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item field="qq" title="用户QQ" :span="12" :item-render="{}">
+						<template #default="{ data }">
+							<vxe-input v-model="data.qq" :disabled="true"></vxe-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item field="ema" title="用户邮箱" :span="12" :item-render="{}">
+						<template #default="{ data }">
+							<vxe-input v-model="data.ema" :disabled="true"></vxe-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item field="cate" title="建议类别" :span="12" :item-render="{}">
+						<template #default="{ data }">
+							<vxe-input v-model="data.cate" :disabled="true"></vxe-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item field="adv" title="用户建议" :span="12" :item-render="{}">
+						<template #default="{ data }">
+							<vxe-input v-model="data.adv" :disabled="true"></vxe-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item field="rat" title="用户评分" :span="12" :item-render="{}">
+						<template #default="{ data }">
+							<vxe-input v-model="data.rat" :disabled="true"></vxe-input>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item field="statu" title="建议状态" :span="12" :item-render="{}">
+						<template #default="{ data }">
+							<vxe-radio-group v-model="data.statu">
+								<vxe-radio label="待处理" content="待处理"></vxe-radio>
+								<vxe-radio label="已处理" content="已处理"></vxe-radio>
+							</vxe-radio-group>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item field="re" title="管理回复" :span="24" :item-render="{}"
+						:title-suffix="{ message: '填写回复用户信息', icon: 'vxe-icon-question-circle-fill' }">
+						<template #default="{ data }">
+							<vxe-textarea v-model="data.re" :autosize="{ minRows: 2, maxRows: 4 }"></vxe-textarea>
+						</template>
+					</vxe-form-item>
+					<vxe-form-item align="center" title-align="left" :span="24">
+						<template #default>
+							<vxe-button type="submit" @click="onSubmit">提交</vxe-button>
+						</template>
+					</vxe-form-item>
+				</vxe-form>
+			</template>
+		</vxe-modal>
 		<!-- 抽屉效果 -->
-		<div style="text-align: center;">
-			<el-drawer v-model="dialog" title="用户建议处理" direction="ltr" size="50%">
-				<div style="margin: 0 auto;width: 400px;">
-					<el-form :model="userinfo">
-						<el-form-item label="用户账号:" style="margin-left: 50px;">
-							<el-input v-model="userinfo.acc" style="width: 150px;" disabled />
-						</el-form-item>
-						<el-form-item label="用户昵称:" style="margin-left: 50px;">
-							<el-input v-model="userinfo.nic" style="width: 150px;" disabled />
-						</el-form-item>
-						<el-form-item label="用户QQ:" style="margin-left: 50px;">
-							<el-input v-model="userinfo.qq" style="width: 150px;" disabled />
-						</el-form-item>
-						<el-form-item label="用户邮箱:" style="margin-left: 50px;">
-							<el-input v-model="userinfo.ema" style="width: 150px;" disabled />
-						</el-form-item>
-						<el-form-item label="建议类别:" style="margin-left: 50px;">
-							<el-input v-model="userinfo.cate" style="width: 150px;" disabled />
-						</el-form-item>
-						<el-form-item label="用户建议:" style="margin-left: 50px;">
-							<el-input v-model="userinfo.adv" style="width: 150px;" disabled />
-						</el-form-item>
-						<el-form-item label="用户评分:" style="margin-left: 50px;">
-							<el-input v-model="userinfo.rat" style="width: 150px;" disabled />
-						</el-form-item>
-						<el-form-item label="建议状态:" style="margin-left: 50px;">
-							<el-select v-model="userinfo.statu" placeholder="请选择" style="width: 150px;">
-								<el-option label="待处理" value="待处理" />
-								<el-option label="已处理" value="已处理" />
-							</el-select>
-						</el-form-item>
-						<el-form-item label="管理回复:" style="margin-left: 50px;">
-							<el-input type="textarea" v-model="userinfo.re" style="width: 250px;" clearable maxlength="255"
-								placeholder="请输入回复内容...(最多255个字)" show-word-limit :rows="8" />
-						</el-form-item>
-						<el-form-item>
-							<el-button style="margin: 0 auto;" type="primary" @click="onSubmit">提交</el-button>
-						</el-form-item>
-					</el-form>
-				</div>
-			</el-drawer>
-		</div>
 </template>
 <script lang="ts" setup>
 import { ForAccount, ForAllAdvice, updatedAdvice } from '@/services/api/user';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
-import { VxeGridListeners, VxeGridProps, VxePagerEvents } from 'vxe-table';
+import { VxeGridInstance, VxeGridListeners, VxeGridProps, VxePagerEvents } from 'vxe-table';
 const search = ref('')
 const tableData = ref([])
-const loading = ref(false)
+let loading = ref(false)
+
+const xGrid = ref<VxeGridInstance>()
 const dialog = ref(false)
 const userinfo = reactive({
 	id: "",
@@ -123,6 +152,11 @@ const gridOptions = reactive<VxeGridProps>({
 	columnConfig: {
 		resizable: true
 	},
+	id: 'full_edit_1',
+	rowConfig: {
+		keyField: 'id',
+		isHover: true
+	},
 	formConfig: {
 		data: {
 			account: '',
@@ -136,10 +170,17 @@ const gridOptions = reactive<VxeGridProps>({
 	},
 	toolbarConfig: {
 		export: true,
-		custom: true
+		custom: true,
+		buttons: [
+			{ code: 'add', name: '新增' },
+			{ code: 'delete', name: '直接删除' },
+			{ code: 'mark_cancel', name: '删除/取消' },
+			{ code: 'save', name: 'app.body.button.save', status: 'success' }
+		],
 	},
 	columns: [
-		{ type: 'seq', width: 60 },
+
+		{ type: 'checkbox', title: 'ID', width: 120 },
 		{ field: 'account', title: '用户账号' },
 		{ field: 'nickname', title: '用户昵称' },
 		{ field: 'qnumber', title: 'QQ' },
@@ -150,7 +191,13 @@ const gridOptions = reactive<VxeGridProps>({
 		{ field: 'status', title: '状态' },
 		{ title: '操作', slots: { default: 'operate' } }
 	],
-	data: []
+	data: [],
+	checkboxConfig: {
+		labelField: 'id',
+		reserve: true,
+		highlight: true,
+		range: true
+	},
 })
 
 const findList = () => {
@@ -168,6 +215,24 @@ const handlePageChange: VxePagerEvents.PageChange = ({ currentPage, pageSize }) 
 const gridEvents: VxeGridListeners = {
 	formSubmit() {
 		searchUser()
+	},
+	toolbarButtonClick({ code }) {
+		const $grid = xGrid.value
+		switch (code) {
+			case 'add': {
+				$grid?.insert({ name: 'xxx' })
+				console.log(121212);
+
+				break;
+
+			}
+			case 'delete': {
+
+			}
+		}
+	},
+	cellDblclick({ row }) {
+		open(row)
 	}
 }
 
@@ -276,6 +341,7 @@ const onSubmit = () => {
 			}
 		})
 	}
+	findList()
 }
 
 
