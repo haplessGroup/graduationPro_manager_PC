@@ -9,8 +9,7 @@ import { createPinia } from "pinia";
 import PiniaPluginPersist from "pinia-plugin-persistedstate";
 import { App as TaPP, createApp } from "vue";
 import {
-  Column,
-  Icon,
+  Column, Export, Icon,
   Keyboard,
   Table,
   VxeButton,
@@ -22,8 +21,7 @@ import {
   VxeList,
   VxeModal,
   VxeModuleEdit,
-  VxeModuleFilter,
-  VxeOption,
+  VxeModuleFilter, VxeModuleValidator, VxeOption,
   VxePager,
   VxeRadio,
   VxeRadioGroup,
@@ -32,7 +30,7 @@ import {
   VXETable,
   VxeTextarea,
   VxeToolbar,
-  VxeTooltip,
+  VxeTooltip
 } from "vxe-table";
 import zhCN from "vxe-table/es/locale/lang/zh-CN";
 import "xe-utils";
@@ -70,7 +68,7 @@ function useTable(app: TaPP) {
     .use(Keyboard)
     .use(VxeRadio)
     .use(VxeRadioGroup)
-    .use(VxeTextarea);
+    .use(VxeTextarea).use(VxeModuleValidator).use(Export)
 }
 createApp(App)
   .use(router)

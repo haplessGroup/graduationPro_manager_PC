@@ -1,32 +1,27 @@
 <template>
-
 			<vxe-grid v-bind="gridOptions" v-on="gridEvents">
 				<template #account_item="{ data }">
 					<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
 				</template>
 				<template #status_item="{ data }">
-					<vxe-select v-model="data.status" transfer>
-						<vxe-option v-for="item in options1" :key="item.value" :value="item.value" :label="item.label">
-						</vxe-option>
-					</vxe-select>
-				</template>
-				<template #operate_item>
-					<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
-					<vxe-button type="reset" content="重置" @click="showAllAccounts()"></vxe-button>
-				</template>
-				<template #pager>
-					<vxe-pager
-						:layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
-						v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize"
-						:total="tablePage.total" @page-change="handlePageChange">
-					</vxe-pager>
-				</template>
-				<template #operate="{ row }">
-					<vxe-button type="text" status="primary" content="删除" @click="deleteDate(row)"></vxe-button>
-				</template>
-				<template #dbtime_slot="{ row }">
-					<span>{{ timeFormatSeconds(row.dbtime) }}</span>
-				</template>
+						<vxe-input v-model="data.nickname" type="text" placeholder="请输入昵称"></vxe-input>
+					</template>
+					<template #operate_item>
+						<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
+						<vxe-button type="reset" content="重置" @click="showAllAccounts()"></vxe-button>
+					</template>
+					<template #pager>
+						<vxe-pager :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
+							v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize" :total="tablePage.total"
+							@page-change="handlePageChange">
+						</vxe-pager>
+					</template>
+					<template #operate="{ row }">
+						<vxe-button type="text" status="primary" content="删除" @click="deleteDate(row)"></vxe-button>
+					</template>
+					<template #dbtime_slot="{ row }">
+						<span>{{ timeFormatSeconds(row.dbtime) }}</span>
+					</template>
 				</vxe-grid>
 </template>
 <script lang="ts" setup>
@@ -86,12 +81,12 @@ const gridOptions = reactive<VxeGridProps>({
 	},
 	formConfig: {
 		data: {
-			account: '',
-			status: ''
+			account: undefined,
+			nickname: undefined
 		},
 		items: [
 			{ field: 'account', title: '账号', slots: { default: 'account_item' } },
-			{ field: 'status', title: '状态', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'status_item' } },
+			{ field: 'nickname', title: '状态', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'status_item' } },
 			{ slots: { default: 'operate_item' } }
 		]
 	},
@@ -130,7 +125,6 @@ const gridEvents: VxeGridListeners = {
 findList()
 
 
-
 const deleteDate = (row: { dbaccount: any; id: any; }) => {
 
 	deleteMovieMessage({ account: row.dbaccount, id: row.id }).then((res: any) => {
@@ -140,7 +134,7 @@ const deleteDate = (row: { dbaccount: any; id: any; }) => {
 				type: 'success',
 				showClose: true
 			})
-			findList()
+
 		} else if (res.msg == "failed") {
 			ElMessage({
 				message: "提交失败~",
@@ -168,5 +162,4 @@ const showAllAccounts = () => {
 </script>
 
 <style>
-
 </style>

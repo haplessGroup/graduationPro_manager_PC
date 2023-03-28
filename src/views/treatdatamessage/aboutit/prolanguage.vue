@@ -4,10 +4,7 @@
 				<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
 			</template>
 			<template #status_item="{ data }">
-				<vxe-select v-model="data.status" transfer>
-					<vxe-option v-for="item in options1" :key="item.value" :value="item.value" :label="item.label">
-					</vxe-option>
-				</vxe-select>
+				<vxe-input v-model="data.nickname" type="text" placeholder="请输入昵称"></vxe-input>
 			</template>
 			<template #operate_item>
 				<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
@@ -84,12 +81,12 @@ const gridOptions = reactive<VxeGridProps>({
 	},
 	formConfig: {
 		data: {
-			account: '',
-			status: ''
+			account: undefined,
+			nickname: undefined
 		},
 		items: [
 			{ field: 'account', title: '账号', slots: { default: 'account_item' } },
-			{ field: 'status', title: '状态', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'status_item' } },
+			{ field: 'nickname', title: '昵称', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'status_item' } },
 			{ slots: { default: 'operate_item' } }
 		]
 	},
@@ -124,7 +121,7 @@ const handlePageChange: VxePagerEvents.PageChange = ({ currentPage, pageSize }) 
 }
 const gridEvents: VxeGridListeners = {
 	formSubmit() {
-		findList()
+		findList
 	}
 }
 findList()

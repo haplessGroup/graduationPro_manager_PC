@@ -1,348 +1,296 @@
 <template>
-    <vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents">
-                    <template #account_item="{ data }">
-                        <vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
-                    </template>
-                    <template #status_item="{ data }">
-                        <vxe-select v-model="data.status" transfer>
-                            <vxe-option v-for="item in options" :key="item.value" :value="item.value" :label="item.label">
-                            </vxe-option>
-                        </vxe-select>
-                    </template>
-                    <template #operate_item>
-                        <vxe-button type="submit" status="primary" content="查询" @click="searchUser()"></vxe-button>
-                        <vxe-button type="reset" content="重置" @click="findList()"></vxe-button>
-                    </template>
-                    <template #pager>
-                        <vxe-pager :layouts="['Sizes', 'PrevJump', 'PrevPage', 'Number', 'NextPage', 'NextJump', 'FullJump', 'Total']"
-                            v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize" :total="tablePage.total"
-                            @page-change="handlePageChange">
-                        </vxe-pager>
-                    </template>
-                    <template #operate="{ row }">
-                        <vxe-button type="text" status="primary" content="去处理" @click="open(row)"></vxe-button>
-                    </template>
-                </vxe-grid>
-                <vxe-modal v-model="dialog" title="处理留言" width="800" min-width="600" min-height="300" :esc-closable="true" resize
-                    destroy-on-close>
-                    <template #default>
-                        <vxe-form :data="userinfo" title-align="right" title-width="100">
-                            <vxe-form-item title="基础信息" title-align="left" :title-width="200" :span="24"
-                                :title-prefix="{ icon: 'vxe-icon-comment' }"></vxe-form-item>
-
-                            <vxe-form-item field="id" title="ID" :span="12" :item-render="{}">
-                                <template #default="{ data }">
-                                    <vxe-input v-model="data.id" :disabled="true"></vxe-input>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item field="acc" title="用户账号" :span="12" :item-render="{}">
-                                <template #default="{ data }">
-                                    <vxe-input v-model="data.acc" :disabled="true"></vxe-input>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item field="nic" title="用户昵称" :span="12" :item-render="{}">
-                                <template #default="{ data }">
-                                    <vxe-input v-model="data.nic" :disabled="true"></vxe-input>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item field="qq" title="用户QQ" :span="12" :item-render="{}">
-                                <template #default="{ data }">
-                                    <vxe-input v-model="data.qq" :disabled="true"></vxe-input>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item field="ema" title="用户邮箱" :span="12" :item-render="{}">
-                                <template #default="{ data }">
-                                    <vxe-input v-model="data.ema" :disabled="true"></vxe-input>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item field="cate" title="建议类别" :span="12" :item-render="{}">
-                                <template #default="{ data }">
-                                    <vxe-input v-model="data.cate" :disabled="true"></vxe-input>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item field="adv" title="用户建议" :span="12" :item-render="{}">
-                                <template #default="{ data }">
-                                    <vxe-input v-model="data.adv" :disabled="true"></vxe-input>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item field="rat" title="用户评分" :span="12" :item-render="{}">
-                                <template #default="{ data }">
-                                    <vxe-input v-model="data.rat" :disabled="true"></vxe-input>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item field="statu" title="建议状态" :span="12" :item-render="{}">
-                                <template #default="{ data }">
-                                    <vxe-radio-group v-model="data.statu">
-                                        <vxe-radio label="待处理" content="待处理"></vxe-radio>
-                                        <vxe-radio label="已处理" content="已处理"></vxe-radio>
-                                    </vxe-radio-group>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item field="re" title="管理回复" :span="24" :item-render="{}"
-                                :title-suffix="{ message: '填写回复用户信息', icon: 'vxe-icon-question-circle-fill' }">
-                                <template #default="{ data }">
-                                    <vxe-textarea v-model="data.re" :autosize="{ minRows: 2, maxRows: 4 }"></vxe-textarea>
-                                </template>
-                            </vxe-form-item>
-                            <vxe-form-item align="center" title-align="left" :span="24">
-                                <template #default>
-                                    <vxe-button type="submit" @click="onSubmit">提交</vxe-button>
-                                </template>
-                            </vxe-form-item>
-                        </vxe-form>
-                    </template>
-                </vxe-modal>
-                <!-- 抽屉效果 -->
+            <vxe-grid ref='xGrid' v-bind="gridOptions"></vxe-grid>
 </template>
-<script lang="ts" setup>
-import { ForAccount, ForAllAdvice, updatedAdvice } from '@/services/api/user';
-import axios from 'axios';
-import { ElMessage } from 'element-plus';
-import { reactive, ref } from 'vue';
-import { VxeGridInstance, VxeGridListeners, VxeGridProps, VxePagerEvents } from 'vxe-table';
-const search = ref('')
-const tableData = ref([])
-let loading = ref(false)
+<script lang="ts" >
 
-const xGrid = ref<VxeGridInstance>()
-const dialog = ref(false)
-const userinfo = reactive({
-    id: "",
-    acc: "",
-    nic: "",
-    qq: "",
-    ema: "",
-    cate: "",
-    adv: "",
-    rat: "",
-    statu: "",
-    re: ""
-})
-const searchUser = async () => {
-    const result = await ForAccount({ key: gridOptions.formConfig?.data.account, skip: tablePage.pageSize, page: tablePage.currentPage, flag: 1 })
-    gridOptions.data = result.data.pagination
-    gridOptions.loading = false; tablePage.total = result.data.jynum
+import { computed, defineComponent, onMounted, reactive, ref } from 'vue';
+// import { useStore } from 'vuex';
+import { VxeGridInstance, VxeGridProps, VXETable } from 'vxe-table';
+import XEUtils from 'xe-utils';
 
-}
-const socket = ref(null)
-// 调教筛选：建议处理状态
+export default defineComponent({
+    setup() {
+        // const store = useStore()
+        const serveApiUrl = computed(() => "https://api.vxetable.cn/demo")
 
-const options = reactive([
-    {
-        value: '0',
-        label: '待处理',
-    },
-    {
-        value: '1',
-        label: '已处理',
-    }
-])
+        const xGrid = ref<VxeGridInstance>()
 
-const tablePage = reactive({
-    total: 0,
-    currentPage: 1,
-    pageSize: 10
-})
-const gridOptions = reactive<VxeGridProps>({
-    border: true,
-    showOverflow: true,
-    loading: false,
-    height: 800,
-    exportConfig: {},
-    columnConfig: {
-        resizable: true
-    },
-    id: 'full_edit_1',
-    rowConfig: {
-        keyField: 'id',
-        isHover: true
-    },
-    formConfig: {
-        data: {
-            account: '',
-            status: ''
-        },
-        items: [
-            { field: 'account', title: '账号', slots: { default: 'account_item' } },
-            { field: 'status', title: '状态', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'status_item' } },
-            { slots: { default: 'operate_item' } }
-        ]
-    },
-    toolbarConfig: {
-        export: true,
-        custom: true,
-        buttons: [
-            { code: 'add', name: '新增' },
-            { code: 'delete', name: '直接删除' },
-            { code: 'mark_cancel', name: '删除/取消' },
-            { code: 'save', name: 'app.body.button.save', status: 'success' }
-        ],
-    },
-    columns: [
-
-        { type: 'checkbox', title: 'ID', width: 120 },
-        { field: 'account', title: '用户账号' },
-        { field: 'nickname', title: '用户昵称' },
-        { field: 'qnumber', title: 'QQ' },
-        { field: 'email', title: '电子邮箱' },
-        { field: 'category', title: '建议类别' },
-        { field: 'advice', title: '用户建议' },
-        { field: 'rate', title: '评分' },
-        { field: 'status', title: '状态' },
-        { title: '操作', slots: { default: 'operate' } }
-    ],
-    data: [],
-    checkboxConfig: {
-        labelField: 'id',
-        reserve: true,
-        highlight: true,
-        range: true
-    },
-})
-
-const findList = () => {
-    gridOptions.loading = true
-    ForAllAdvice({ skip: tablePage.pageSize, page: tablePage.currentPage }).then(res => {
-        gridOptions.data = res.data.pagination; gridOptions.loading = false; tablePage.total = res.data.jynum
-    })
-
-}
-const handlePageChange: VxePagerEvents.PageChange = ({ currentPage, pageSize }) => {
-    tablePage.currentPage = currentPage
-    tablePage.pageSize = pageSize
-    findList()
-}
-const gridEvents: VxeGridListeners = {
-    // formSubmit() {
-    //     searchUser()
-    // },
-    toolbarButtonClick({ code }) {
-        const $grid = xGrid.value
-        switch (code) {
-            case 'add': {
-                $grid?.insert({ name: 'xxx' })
-                console.log(121212);
-
-                break;
-
+        const gridOptions = reactive<VxeGridProps>({
+            border: true,
+            showHeaderOverflow: true,
+            showOverflow: true,
+            keepSource: true,
+            id: 'full_edit_1',
+            height: 600,
+            rowConfig: {
+                keyField: 'id',
+                isHover: true
+            },
+            columnConfig: {
+                resizable: true
+            },
+            customConfig: {
+                storage: true,
+                checkMethod({ column }) {
+                    if (['nickname', 'role'].includes(column.field)) {
+                        return false
+                    }
+                    return true
+                }
+            },
+            printConfig: {
+                columns: [
+                    { field: 'name' },
+                    { field: 'email' },
+                    { field: 'nickname' },
+                    { field: 'age' },
+                    { field: 'amount' }
+                ]
+            },
+            sortConfig: {
+                trigger: 'cell',
+                remote: true
+            },
+            filterConfig: {
+                remote: true
+            },
+            pagerConfig: {
+                pageSize: 10,
+                pageSizes: [5, 10, 15, 20, 50, 100, 200, 500, 1000]
+            },
+            formConfig: {
+                titleWidth: 100,
+                titleAlign: 'right',
+                items: [
+                    { field: 'name', title: 'app.body.label.name', span: 8, titlePrefix: { message: 'app.body.valid.rName', icon: 'vxe-icon-question-circle-fill' }, itemRender: { name: '$input', props: { placeholder: '请输入名称' } } },
+                    { field: 'email', title: '邮件', span: 8, titlePrefix: { useHTML: true, message: '点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>', icon: 'vxe-icon-question-circle-fill' }, itemRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
+                    { field: 'nickname', title: '昵称', span: 8, itemRender: { name: '$input', props: { placeholder: '请输入昵称' } } },
+                    { field: 'role', title: '角色', span: 8, folding: true, itemRender: { name: '$input', props: { placeholder: '请输入角色' } } },
+                    { field: 'sex', title: '性别', span: 8, folding: true, titleSuffix: { message: '注意，必填信息！', icon: 'vxe-icon-question-circle-fill' }, itemRender: { name: '$select', options: [] } },
+                    { field: 'age', title: '年龄', span: 8, folding: true, itemRender: { name: '$input', props: { type: 'number', min: 1, max: 120, placeholder: '请输入年龄' } } },
+                    { span: 24, align: 'center', collapseNode: true, itemRender: { name: '$buttons', children: [{ props: { type: 'submit', content: 'app.body.label.search', status: 'primary' } }, { props: { type: 'reset', content: 'app.body.label.reset' } }] } }
+                ]
+            },
+            toolbarConfig: {
+                buttons: [
+                    { code: 'insert_actived', name: '新增' },
+                    { code: 'delete', name: '直接删除' },
+                    { code: 'mark_cancel', name: '删除/取消' },
+                    { code: 'save', name: 'app.body.button.save', status: 'success' }
+                ],
+                refresh: true,
+                import: true,
+                export: true,
+                print: true,
+                zoom: true,
+                custom: true
+            },
+            proxyConfig: {
+                seq: true, // 启用动态序号代理，每一页的序号会根据当前页数变化
+                sort: true, // 启用排序代理，当点击排序时会自动触发 query 行为
+                filter: true, // 启用筛选代理，当点击筛选时会自动触发 query 行为
+                form: true, // 启用表单代理，当点击表单提交按钮时会自动触发 reload 行为
+                // 对应响应结果 { result: [], page: { total: 100 } }
+                props: {
+                    result: 'result', // 配置响应结果列表字段
+                    total: 'page.total' // 配置响应结果总页数字段
+                },
+                // 只接收Promise，具体实现自由发挥
+                ajax: {
+                    // 当点击工具栏查询按钮或者手动提交指令 query或reload 时会被触发
+                    query: ({ page, sorts, filters, form }) => {
+                        const queryParams: any = Object.assign({}, form)
+                        // 处理排序条件
+                        const firstSort = sorts[0]
+                        if (firstSort) {
+                            queryParams.sort = firstSort.field
+                            queryParams.order = firstSort.order
+                        }
+                        // 处理筛选条件
+                        filters.forEach(({ field, values }) => {
+                            queryParams[field] = values.join(',')
+                        })
+                        return fetch(`${serveApiUrl.value}/api/pub/page/list/${page.pageSize}/${page.currentPage}?${XEUtils.serialize(queryParams)}`).then(response => response.json())
+                    },
+                    // 当点击工具栏删除按钮或者手动提交指令 delete 时会被触发
+                    delete: ({ body }) => {
+                        return fetch(`${serveApiUrl.value}/api/pub/save`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(response => response.json())
+                    },
+                    // 当点击工具栏保存按钮或者手动提交指令 save 时会被触发
+                    save: ({ body }) => {
+                        return fetch(`${serveApiUrl.value}/api/pub/save`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(response => response.json())
+                    }
+                }
+            },
+            columns: [
+                { type: 'checkbox', title: 'ID', width: 120 },
+                { field: 'name', title: 'Name', sortable: true, titlePrefix: { message: '名称必须填写！' }, editRender: { name: 'input', attrs: { placeholder: '请输入名称' } } },
+                {
+                    field: 'role',
+                    title: 'Role',
+                    sortable: true,
+                    titlePrefix: { useHTML: true, content: '点击链接：<a class="link" href="https://vxetable.cn" target="_blank">vxe-table官网</a>' },
+                    filters: [
+                        { label: '前端开发', value: '前端' },
+                        { label: '后端开发', value: '后端' },
+                        { label: '测试', value: '测试' },
+                        { label: '程序员鼓励师', value: '程序员鼓励师' }
+                    ],
+                    filterMultiple: false,
+                    editRender: { name: 'input', attrs: { placeholder: '请输入角色' } }
+                },
+                { field: 'email', title: 'Email', width: 160, editRender: { name: '$input', props: { placeholder: '请输入邮件' } } },
+                { field: 'nickname', title: 'Nickname', editRender: { name: 'input', attrs: { placeholder: '请输入昵称' } } },
+                {
+                    field: 'sex',
+                    title: 'Sex',
+                    filters: [
+                        { label: '男', value: '1' },
+                        { label: '女', value: '0' }
+                    ],
+                    editRender: { name: '$select', options: [], props: { placeholder: '请选择性别' } }
+                },
+                { field: 'age', title: 'Age', visible: false, sortable: true, editRender: { name: '$input', props: { type: 'number', min: 1, max: 120 } } },
+                {
+                    field: 'amount',
+                    title: 'Amount',
+                    formatter({ cellValue }) {
+                        return cellValue ? `￥${XEUtils.commafy(XEUtils.toNumber(cellValue), { digits: 2 })}` : ''
+                    },
+                    editRender:
+                        { name: '$input', props: { type: 'float', digits: 2, placeholder: '请输入数值' } }
+                },
+                {
+                    field: 'updateDate',
+                    title: 'Update Date',
+                    width: 160,
+                    visible: false,
+                    sortable: true,
+                    formatter({ cellValue }) {
+                        return XEUtils.toDateString(cellValue, 'yyyy-MM-dd HH:ss:mm')
+                    }
+                },
+                {
+                    field: 'createDate',
+                    title: 'Create Date',
+                    width: 160,
+                    visible: false,
+                    sortable: true,
+                    formatter({ cellValue }) {
+                        return XEUtils.toDateString(cellValue, 'yyyy-MM-dd')
+                    }
+                }
+            ],
+            importConfig: {
+                remote: true,
+                types: ['xlsx'],
+                modes: ['insert'],
+                // 自定义服务端导入
+                importMethod({ file }) {
+                    const $grid = xGrid.value
+                    const formBody = new FormData()
+                    formBody.append('file', file)
+                    return fetch(`${serveApiUrl.value}/api/pub/import`, { method: 'POST', body: formBody }).then(response => response.json()).then(data => {
+                        VXETable.modal.message({ content: `成功导入 ${data.result.insertRows} 条记录！`, status: 'success' })
+                        // 导入完成，刷新表格
+                        $grid.commitProxy('query')
+                    }).catch(() => {
+                        VXETable.modal.message({ content: '导入失败，请检查数据是否正确！', status: 'error' })
+                    })
+                }
+            },
+            exportConfig: {
+                remote: true,
+                types: ['xlsx'],
+                modes: ['current', 'selected', 'all'],
+                // 自定义服务端导出
+                exportMethod({ options }) {
+                    const $grid = xGrid.value
+                    const proxyInfo = $grid.getProxyInfo()
+                    // 传给服务端的参数
+                    const body = {
+                        filename: options.filename,
+                        sheetName: options.sheetName,
+                        isHeader: options.isHeader,
+                        original: options.original,
+                        mode: options.mode,
+                        pager: proxyInfo ? proxyInfo.pager : null,
+                        ids: options.mode === 'selected' ? options.data.map((item) => item.id) : [],
+                        fields: options.columns.map((column) => {
+                            return {
+                                field: column.field,
+                                title: column.title
+                            }
+                        })
+                    }
+                    // 开始服务端导出
+                    return fetch(`${serveApiUrl.value}/api/pub/export`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(response => response.json()).then(data => {
+                        if (data.id) {
+                            VXETable.modal.message({ content: '导出成功，开始下载', status: 'success' })
+                            // 读取路径，请求文件
+                            fetch(`${serveApiUrl.value}/api/pub/export/download/${data.id}`).then(response => {
+                                response.blob().then(blob => {
+                                    // 开始下载
+                                    VXETable.saveFile({ filename: '导出数据', type: 'xlsx', content: blob })
+                                })
+                            })
+                        }
+                    }).catch(() => {
+                        VXETable.modal.message({ content: '导出失败！', status: 'error' })
+                    })
+                }
+            },
+            checkboxConfig: {
+                labelField: 'id',
+                reserve: true,
+                highlight: true,
+                range: true
+            },
+            editRules: {
+                name: [
+                    { required: true, message: 'app.body.valid.rName' },
+                    { min: 3, max: 50, message: '名称长度在 3 到 50 个字符' }
+                ],
+                email: [
+                    { required: true, message: '邮件必须填写' }
+                ],
+                role: [
+                    { required: true, message: '角色必须填写' }
+                ]
+            },
+            editConfig: {
+                trigger: 'click',
+                mode: 'row',
+                showStatus: true
             }
-            case 'delete': {
+        })
 
+        onMounted(() => {
+            const sexList = [
+                { label: '女', value: '0' },
+                { label: '男', value: '1' }
+            ]
+            const { formConfig, columns } = gridOptions
+            if (columns) {
+                const sexColumn = columns[5]
+                if (sexColumn && sexColumn.editRender) {
+                    sexColumn.editRender.options = sexList
+                }
             }
+            if (formConfig && formConfig.items) {
+                const sexItem = formConfig.items[4]
+                if (sexItem && sexItem.itemRender) {
+                    sexItem.itemRender.options = sexList
+                }
+            }
+        })
+
+        return {
+            xGrid,
+            gridOptions
         }
-    },
-    cellDblclick({ row }) {
-        open(row)
     }
-}
-
-findList()
-
-const sexList1 = ref<any[]>([])
-
-// 异步更新下拉选项
-setTimeout(() => {
-    sexList1.value = [
-        { value: '1', label: '男' },
-        { value: '0', label: '女' }
-    ]
-}, 200)
-
-
-// 搜索建议
-const searchAdvice = () => {
-    if (search.value == '') {
-        ElMessage({
-            message: '搜索的账号不能为空!',
-            type: 'error',
-            showClose: true
-        })
-    } else {
-        loading.value = true
-        axios({
-            url: "http://127.0.0.1:5310/serarchadvice",
-            method: "POST",
-            data: { "account": search }
-        }).then(res => {
-            loading.value = false
-            if (res.data == "no result") {
-                ElMessage({
-                    message: '没有找到账号' + search + "的建议~",
-                    type: "warning",
-                    showClose: true
-                })
-            } else if (res.data == "ERROR") {
-                ElMessage({
-                    message: '后台出现错误~',
-                    type: "error",
-                    showClose: true
-                })
-            } else {
-                tableData.value = res.data
-            }
-        })
-    }
-}
-
-const open = (data: { id: string; account: string; nickname: string; qnumber: string; email: string; category: string; advice: string; rate: string; status: string; re: string; }) => {
-    dialog.value = true
-
-    userinfo.id = data.id
-    userinfo.acc = data.account
-    userinfo.nic = data.nickname
-    userinfo.qq = data.qnumber
-    userinfo.ema = data.email
-    userinfo.cate = data.category
-    userinfo.adv = data.advice
-    userinfo.rat = data.rate
-    userinfo.statu = data.status
-    userinfo.re = data.re
-
-}
-const onSubmit = () => {
-    var user = userinfo
-    if (user.re == '') {
-        ElMessage({
-            message: '请输入回复消息!',
-            type: "error",
-            showClose: true
-        })
-    } else if (user.statu == '待处理') {
-        ElMessage({
-            message: '请将状态改为已处理~',
-            type: "warning",
-            showClose: true
-        })
-    } else {
-        updatedAdvice({ statu: user.statu, re: user.re, id: user.id, account: user.acc }).then((res: any
-        ) => {
-            console.log(res.msg === 'OK');
-
-            // console.log(drawerloading)
-            if (res.msg === 'OK') {
-                ElMessage({
-                    message: '提交成功!',
-                    type: "success",
-                    showClose: true
-                })
-                dialog.value = false
-            } else if (res.msg == "failed") {
-                ElMessage({
-                    message: '提交失败!',
-                    type: "error",
-                    showClose: true
-                })
-            } else {
-                ElMessage({
-                    message: '系统出现错误!',
-                    type: "error",
-                    showClose: true
-                })
-            }
-        })
-    }
-    findList()
-}
+})
 
 
 </script>

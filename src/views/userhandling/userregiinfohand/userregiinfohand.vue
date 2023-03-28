@@ -1,46 +1,45 @@
 <template>
-			<vxe-grid show-overflow show-header-overflow show-footer-overflow :tooltip-config="tableTooltipConfig"
-				v-bind="gridOptions" v-on="gridEvents">
-				<template #account_item="{ data }">
-					<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
-				</template>
-				<template #status_item="{ data }">
-					<vxe-select v-model="data.status" transfer>
-						<vxe-option v-for="item in options1" :key="item.value" :value="item.value" :label="item.label">
-						</vxe-option>
-					</vxe-select>
-				</template>
-				<template #operate_item>
-					<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
-					<vxe-button type="reset" content="重置" @click="showAllAccounts()"></vxe-button>
-				</template>
-				<template #pager>
-					<vxe-pager :layouts="[
-						'Sizes',
-						'PrevJump',
-						'PrevPage',
-						'Number',
-						'NextPage',
-						'NextJump',
-						'FullJump',
-						'Total',
-					]" v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize" :total="tablePage.total"
-						@page-change="handlePageChange">
-					</vxe-pager>
-				</template>
-				<template #operate="{ row }">
-					<vxe-button type="text" status="primary" content="提交" @click="submitData(row)"></vxe-button>
-				</template>
-				<template #regitime_slot="{ row }">
-					<span>{{ timeFormatSeconds(row.regitime) }}</span>
-				</template>
-				<template #isloginallowed_edit="{ row }">
-					<vxe-select v-model="row.isloginallowed" transfer>
-						<vxe-option v-for="item in options2" :key="item.value" :value="item.value"
-							:label="item.label"></vxe-option>
-					</vxe-select>
-				</template>
-				</vxe-grid>
+		<vxe-grid show-overflow show-header-overflow show-footer-overflow :tooltip-config="tableTooltipConfig"
+			v-bind="gridOptions" v-on="gridEvents">
+			<template #account_item="{ data }">
+				<vxe-input v-model="data.account" type="text" placeholder="请输入账号" clearable></vxe-input>
+			</template>
+			<template #status_item="{ data }">
+				<vxe-select v-model="data.isloginallowed" transfer clearable>
+					<vxe-option v-for="item in options2" :key="item.value" :value="item.value" :label="item.label">
+					</vxe-option>
+				</vxe-select>
+			</template>
+			<template #operate_item>
+				<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
+				<vxe-button type="reset" content="重置" @click="showAllAccounts()"></vxe-button>
+			</template>
+			<template #pager>
+				<vxe-pager :layouts="[
+					'Sizes',
+					'PrevJump',
+					'PrevPage',
+					'Number',
+					'NextPage',
+					'NextJump',
+					'FullJump',
+					'Total',
+				]" v-model:current-page="tablePage.currentPage" v-model:page-size="tablePage.pageSize" :total="tablePage.total"
+					@page-change="handlePageChange">
+				</vxe-pager>
+			</template>
+			<template #operate="{ row }">
+				<vxe-button type="text" status="primary" content="提交" @click="submitData(row)"></vxe-button>
+			</template>
+			<template #regitime_slot="{ row }">
+				<span>{{ timeFormatSeconds(row.regitime) }}</span>
+			</template>
+			<template #isloginallowed_edit="{ row }">
+				<vxe-select v-model="row.isloginallowed" transfer>
+					<vxe-option v-for="item in options2" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
+				</vxe-select>
+			</template>
+		</vxe-grid>
 </template>
 <script lang="ts" setup>
 import {
@@ -105,8 +104,8 @@ const gridOptions = reactive<VxeGridProps>({
 
 	formConfig: {
 		data: {
-			account: '',
-			status: '',
+			account: undefined,
+			isloginallowed: undefined,
 		},
 		items: [
 			{ field: 'account', title: '账号', slots: { default: 'account_item' } },
@@ -176,7 +175,7 @@ const handlePageChange: VxePagerEvents.PageChange = ({
 }
 const gridEvents: VxeGridListeners = {
 	formSubmit() {
-		findList()
+
 	},
 }
 findList()

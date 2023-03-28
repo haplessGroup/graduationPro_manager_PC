@@ -1,10 +1,10 @@
 <template>
 		<vxe-grid ref="xGrid" v-bind="gridOptions" v-on="gridEvents">
 			<template #account_item="{ data }">
-				<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
-			</template>
-			<template #status_item="{ data }">
-				<vxe-select v-model="data.status" transfer>
+						<vxe-input v-model="data.account" type="text" placeholder="请输入账号" clearable></vxe-input>
+					</template>
+					<template #status_item="{ data }">
+						<vxe-select v-model="data.status" transfer clearable>
 					<vxe-option v-for="item in options" :key="item.value" :value="item.value" :label="item.label">
 					</vxe-option>
 				</vxe-select>
@@ -95,7 +95,7 @@
 		<!-- 抽屉效果 -->
 </template>
 <script lang="ts" setup>
-import { ForAccount, ForAllAdvice, updatedAdvice } from '@/services/api/user';
+import { ForAllAdvice, updatedAdvice } from '@/services/api/user';
 import axios from 'axios';
 import { ElMessage } from 'element-plus';
 import { reactive, ref } from 'vue';
@@ -119,7 +119,7 @@ const userinfo = reactive({
 	re: ""
 })
 const searchUser = async () => {
-	const result = await ForAccount({ key: gridOptions.formConfig?.data.account, skip: tablePage.pageSize, page: tablePage.currentPage, flag: 1 })
+	const result = await ForAllAdvice({ ...gridOptions.formConfig?.data, skip: tablePage.pageSize, page: tablePage.currentPage, })
 	gridOptions.data = result.data.pagination
 	gridOptions.loading = false; tablePage.total = result.data.jynum
 
@@ -129,11 +129,11 @@ const socket = ref(null)
 
 const options = reactive([
 	{
-		value: '0',
+		value: '待处理',
 		label: '待处理',
 	},
 	{
-		value: '1',
+		value: '已处理',
 		label: '已处理',
 	}
 ])
@@ -159,8 +159,8 @@ const gridOptions = reactive<VxeGridProps>({
 	},
 	formConfig: {
 		data: {
-			account: '',
-			status: ''
+			account: undefined,
+			status: undefined
 		},
 		items: [
 			{ field: 'account', title: '账号', slots: { default: 'account_item' } },

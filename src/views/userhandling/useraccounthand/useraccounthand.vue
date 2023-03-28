@@ -2,10 +2,10 @@
 		<!-- 表格 -->
 		<vxe-grid v-bind="gridOptions" v-on="gridEvents">
 			<template #account_item="{ data }">
-				<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
-			</template>
-			<template #status_item="{ data }">
-				<vxe-select v-model="data.status" transfer>
+						<vxe-input v-model="data.account" type="text" clearable placeholder="请输入账号"></vxe-input>
+					</template>
+					<template #status_item="{ data }">
+							<vxe-select v-model="data.accstatus" transfer clearable>
 					<vxe-option v-for="item in options1" :key="item.value" :value="item.value" :label="item.label">
 					</vxe-option>
 				</vxe-select>
@@ -93,12 +93,12 @@ const gridOptions = reactive<VxeGridProps>({
 	},
 	formConfig: {
 		data: {
-			account: '',
-			status: ''
+			account: undefined,
+			accstatus: undefined
 		},
 		items: [
 			{ field: 'account', title: '账号', slots: { default: 'account_item' } },
-			{ field: 'status', title: '状态', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'status_item' } },
+			{ field: 'accstatus', title: '状态', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'status_item' } },
 			{ slots: { default: 'operate_item' } }
 		]
 	},
@@ -135,7 +135,7 @@ const handlePageChange: VxePagerEvents.PageChange = ({ currentPage, pageSize }) 
 }
 const gridEvents: VxeGridListeners = {
 	formSubmit() {
-		findList()
+
 	}
 }
 findList()
