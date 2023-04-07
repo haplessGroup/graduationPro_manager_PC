@@ -12,7 +12,9 @@ import {
   Column, Export, Icon,
   Keyboard,
   Table,
+  VXETable,
   VxeButton,
+  VxeCheckbox,
   VxeForm,
   VxeFormItem,
   VxeGrid,
@@ -21,27 +23,29 @@ import {
   VxeList,
   VxeModal,
   VxeModuleEdit,
+  VxeModuleExport,
   VxeModuleFilter, VxeModuleValidator, VxeOption,
   VxePager,
   VxeRadio,
   VxeRadioGroup,
   VxeSelect,
   VxeTable,
-  VXETable,
   VxeTextarea,
   VxeToolbar,
   VxeTooltip
 } from "vxe-table";
+import VXETablePluginExportXLSX from 'vxe-table-plugin-export-xlsx';
 import zhCN from "vxe-table/es/locale/lang/zh-CN";
 import "xe-utils";
 import XEUtils from "xe-utils";
 import App from "./App.vue";
 import "./index.css";
 import router from "./router";
-
+VXETable.use(VXETablePluginExportXLSX)
 const pinia = createPinia();
 pinia.use(PiniaPluginPersist);
 VXETable.setup({
+  keepSource: true,
   i18n: (key, args) => XEUtils.toFormatString(XEUtils.get(zhCN, key), args),
 });
 function useTable(app: TaPP) {
@@ -68,7 +72,7 @@ function useTable(app: TaPP) {
     .use(Keyboard)
     .use(VxeRadio)
     .use(VxeRadioGroup)
-    .use(VxeTextarea).use(VxeModuleValidator).use(Export)
+    .use(VxeTextarea).use(VxeModuleValidator).use(Export).use(VxeModuleExport).use(VxeCheckbox)
 }
 createApp(App)
   .use(router)

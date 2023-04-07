@@ -101,6 +101,7 @@ const gridOptions = reactive<VxeGridProps>({
 		mode: 'cell',
 		showStatus: true,
 	},
+	keepSource: true,
 
 	formConfig: {
 		data: {
@@ -221,7 +222,6 @@ const submitData = (data: { account: string; isloginallowed: any }) => {
 	})
 }
 
-showAllAccounts()
 </script>
 
 <style>

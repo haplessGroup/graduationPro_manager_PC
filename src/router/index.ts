@@ -1,5 +1,4 @@
 import layout from "@/layout/index.vue";
-import { ElMessage } from "element-plus";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 // router/index.ts
 import { close, start } from "@/utils/nporgress";
@@ -91,6 +90,80 @@ const routers: RouteRecordRaw[] = [
   },
 ];
 
+export const dynamicRoutes = [
+  {
+    path: "/data",
+    component: layout,
+    redirect: "noredirect",
+    children: [
+      {
+        path: "/home",
+        name: "Home",
+        component: () => import("@/views/Home/index.vue"),
+        meta: { title: "首页" },
+      },
+      {
+        path: "/role",
+        name: "Role",
+        component: () => import("@/views/Role/role.vue"),
+        meta: { title: "角色管理" },
+      },
+      {
+        path: "/treateadvice",
+        component: () => import("@/views/treatadvice/treateadvice.vue"),
+        meta: { title: "建议处理" },
+      },
+    ],
+  },
+  {
+    path: "/account",
+    name: "Account",
+    component: layout,
+    meta: { title: "账号信息处理" },
+    children: [
+      {
+        path: "/useraccounthand",
+        component: () =>
+          import("@/views/userhandling/useraccounthand/useraccounthand.vue"),
+        meta: { title: "账号处理" },
+      },
+      {
+        path: "/userregiinfohand",
+        component: () =>
+          import("@/views/userhandling/userregiinfohand/userregiinfohand.vue"),
+        meta: { title: "注册处理" },
+      },
+    ],
+  },
+  {
+    path: "/message",
+    name: "Message",
+    component: layout,
+    redirect: "noRedirect",
+    meta: { title: "用户留言处理" },
+    children: [
+      {
+        path: "doubantop",
+        component: () =>
+          import("@/views/treatdatamessage/doubantop/doubantop.vue"),
+        meta: { title: "电影留言" },
+      },
+      {
+        path: "prolanguage",
+        component: () =>
+          import("@/views/treatdatamessage/aboutit/prolanguage.vue"),
+        meta: { title: "语言留言" },
+      },
+      {
+        path: "hottravelcity",
+        component: () =>
+          import("@/views/treatdatamessage/hottravelcity/hottravelcity.vue"),
+        meta: { title: "城市留言" },
+      },
+    ],
+  },
+]
+
 const router = createRouter({
   routes: routers,
   history: createWebHistory(),
@@ -112,25 +185,25 @@ router.beforeEach((pre, next) => {
 router.afterEach(() => {
   close();
 });
-router.beforeEach((to, from, next) => {
-  if (auth.includes(to.fullPath)) {
-    let token = localStorage.getItem("admintoken");
-    if (token === null || token === "") {
-      ElMessage({
-        showClose: true,
-        message: "请先登录！",
-        type: "error",
-      });
-      // console.log("asasdasdadas")
-      next({
-        path: "/login",
-      });
-    } else {
-      next();
-    }
-  } else {
-    next();
-  }
-});
+// router.beforeEach((to, from, next) => {
+//   // if (auth.includes(to.fullPath)) {
+//   //   let token = localStorage.getItem("admintoken");
+//   //   if (token === null || token === "") {
+//   //     ElMessage({
+//   //       showClose: true,
+//   //       message: "请先登录！",
+//   //       type: "error",
+//   //     });
+//   //     // console.log("asasdasdadas")
+//   //     next({
+//   //       path: "/login",
+//   //     });
+//   //   } else {
+//   //     next();
+//   //   }
+//   // } else {
+//   //   next();
+//   // }
+// });
 
 export default router;

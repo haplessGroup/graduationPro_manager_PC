@@ -21,6 +21,7 @@
 				</div>
 			</div>
 		</div>
+				<!-- <loginPlate /> -->
 	</el-container>
 </template>
 
@@ -46,8 +47,8 @@ const ruleForm = reactive({
 const validatePass = (rule: any, value: any, callback: any) => {
 	if (value === "") {
 		callback(new Error("请输入密码"));
-	} else if (value.length < 5) {
-		callback(new Error("密码长度不小于5位"));
+	} else if (value.length < 4) {
+		callback(new Error("密码长度不小于4位"));
 	} else if (value.length > 16) {
 		callback(new Error("密码长度不大于20位"));
 	} else {
@@ -89,9 +90,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
 					usetime: res.data.usetime
 				}
 				adminInfoStore.account = adminInfo.value.account
-				setTimeout(() => {
-					router.push({ name: 'Home' })
-				}, 2000)
+
+				router.push({ name: 'Home' })
+
 			})
 		} else {
 			console.log('error submit!')

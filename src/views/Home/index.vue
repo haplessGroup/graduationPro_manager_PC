@@ -52,13 +52,13 @@
 </template>
 
 <script lang="ts" setup>
-
 import router from '@/router';
 import { ForAccountStatus, ForAllAdvice } from '@/services/api/user';
 import * as echarts from "echarts";
 import { ElMessage } from 'element-plus';
 import { VxeGridProps } from 'vxe-table';
 
+import { getweekData } from '@/services/api/chart';
 import { nextTick, reactive, ref } from 'vue';
 export interface paramsQuer {
 	skip: number,
@@ -179,6 +179,13 @@ const showHandlingAccount = () => {
 
 	option && myChart.setOption(option);
 }
+
+const getData = () => {
+	getweekData().then((res) => {
+		console.log(res);
+	})
+}
+getData()
 // 从后台获取所有建议
 const showAllAdvice = () => {
 	let loading = true

@@ -1,10 +1,10 @@
 <template>
 			<vxe-grid v-bind="gridOptions" v-on="gridEvents">
 				<template #account_item="{ data }">
-					<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
-				</template>
-				<template #status_item="{ data }">
-						<vxe-input v-model="data.nickname" type="text" placeholder="请输入昵称"></vxe-input>
+						<vxe-input v-model="data.account" clearable type="text" placeholder="请输入账号"></vxe-input>
+					</template>
+					<template #status_item="{ data }">
+							<vxe-input v-model="data.nickname" clearable type="text" placeholder="请输入昵称"></vxe-input>
 					</template>
 					<template #operate_item>
 						<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>
@@ -86,7 +86,9 @@ const gridOptions = reactive<VxeGridProps>({
 		},
 		items: [
 			{ field: 'account', title: '账号', slots: { default: 'account_item' } },
-			{ field: 'nickname', title: '状态', titlePrefix: { message: '帮助信息！！！', icon: 'vxe-icon-question-circle-fill' }, slots: { default: 'status_item' } },
+			{
+				field: 'nickname', title: '昵称', titlePrefix: { message: '帮助信息！！！', icon: 'vxe - icon - question - circle - fill' }, slots: { default: 'status_item' }
+			},
 			{ slots: { default: 'operate_item' } }
 		]
 	},

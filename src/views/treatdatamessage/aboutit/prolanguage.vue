@@ -1,10 +1,10 @@
 <template>
 		<vxe-grid v-bind="gridOptions" v-on="gridEvents">
 			<template #account_item="{ data }">
-				<vxe-input v-model="data.account" type="text" placeholder="请输入账号"></vxe-input>
-			</template>
-			<template #status_item="{ data }">
-				<vxe-input v-model="data.nickname" type="text" placeholder="请输入昵称"></vxe-input>
+					<vxe-input v-model="data.account" type="text" clearable placeholder="请输入账号"></vxe-input>
+				</template>
+				<template #status_item="{ data }">
+							<vxe-input v-model="data.nickname" type="text" placeholder="请输入昵称" clearable  ></vxe-input>
 			</template>
 			<template #operate_item>
 				<vxe-button type="submit" status="primary" content="查询" @click="findList()"></vxe-button>

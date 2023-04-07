@@ -171,12 +171,12 @@ const gridOptions = reactive<VxeGridProps>({
 	toolbarConfig: {
 		export: true,
 		custom: true,
-		buttons: [
-			{ code: 'add', name: '新增' },
-			{ code: 'delete', name: '直接删除' },
-			{ code: 'mark_cancel', name: '删除/取消' },
-			{ code: 'save', name: 'app.body.button.save', status: 'success' }
-		],
+		// buttons: [
+		// 	{ code: 'add', name: '新增' },
+		// 	{ code: 'delete', name: '直接删除' },
+		// 	{ code: 'mark_cancel', name: '删除/取消' },
+		// 	{ code: 'save', name: 'app.body.button.save', status: 'success' }
+		// ],
 	},
 	columns: [
 
@@ -216,21 +216,21 @@ const gridEvents: VxeGridListeners = {
 	formSubmit() {
 		searchUser()
 	},
-	toolbarButtonClick({ code }) {
-		const $grid = xGrid.value
-		switch (code) {
-			case 'add': {
-				$grid?.insert({ name: 'xxx' })
-				console.log(121212);
+	// toolbarButtonClick({ code }) {
+	// 	const $grid = xGrid.value
+	// 	switch (code) {
+	// 		case 'add': {
+	// 			$grid?.insert({ name: 'xxx' })
+	// 			console.log(121212);
 
-				break;
+	// 			break;
 
-			}
-			case 'delete': {
+	// 		}
+	// 		case 'delete': {
 
-			}
-		}
-	},
+	// 		}
+	// 	}
+	// },
 	cellDblclick({ row }) {
 		open(row)
 	}

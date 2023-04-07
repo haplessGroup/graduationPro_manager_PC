@@ -1,67 +1,22 @@
 import request from '../request'
 export function getRole(query: any) {
   return request({
-    url: "",
+    url: "/user/getrole",
     method: 'GET',
     params: query
   })
 }
-export function delRole(query: any) {
+export function createRole(data: any) {
   return request({
-    url: "",
-
-    method: 'GET',
-    params: query
+    url: "/user/createrole",
+    method: 'POST',
+    data
   })
 }
-export function listRole(query: any) {
+export function deleteRole(data: any) {
   return request({
-    url: "",
-    method: 'GET',
-    params: query
-  })
-}
-export function addRole(query: any) {
-  return request({
-    url: "",
-    method: 'GET',
-    params: query
-  })
-}
-export function updateRole(query: any) {
-  return request({
-    url: "",
-    method: 'GET',
-    params: query
-  })
-}
-export function changeRoleStatus(query: any) {
-  return request({
-    url: "",
-    method: 'GET',
-    params: query
-  })
-}
-export function treeselect(query: any) {
-  return request({
-    url: "",
-    method: 'GET',
-    params: query
-  })
-}
-
-export function roleMenuTreeselect(query: any) {
-  return request({
-    url: "",
-    method: 'GET',
-    params: query
-  })
-}
-
-export function listMenu(query: any) {
-  return request({
-    url: "",
-    method: 'GET',
-    params: query
+    url: "/user/delrole",
+    method: 'POST',
+    data
   })
 }

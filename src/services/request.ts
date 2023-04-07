@@ -12,7 +12,7 @@ axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL:
-    (import.meta.env.VITE_BASE_URL as string) || 'http://127.0.0.1:8000/',
+    (import.meta.env.VITE_BASE_URL as string) || 'http://10.50.20.209:8080/',
   // 'http://gapi.lltanalysis.cn',
   // 超时
   timeout: 10000,
