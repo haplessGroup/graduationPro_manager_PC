@@ -22,13 +22,12 @@
 			</div>
 		</div>
 				<!-- <loginPlate /> -->
-	</el-container>
+																	</el-container>
 </template>
 
 <script lang="ts" setup>
 import router from '@/router';
 import { LoginAdmin } from '@/services/api/user';
-import type { AdminInfo } from '@/store';
 import { useAdminInfoStore } from "@/store";
 import { ElMessage, FormInstance } from 'element-plus';
 import { reactive, ref } from 'vue';
@@ -36,7 +35,6 @@ import { reactive, ref } from 'vue';
 // import { io } from 'socket.io-client'
 
 const admintoken = ref("")
-const adminInfo = ref<AdminInfo>()
 const adminInfoStore = useAdminInfoStore()
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive({
@@ -47,7 +45,7 @@ const ruleForm = reactive({
 const validatePass = (rule: any, value: any, callback: any) => {
 	if (value === "") {
 		callback(new Error("请输入密码"));
-	} else if (value.length < 4) {
+	} else if (value.length < 3) {
 		callback(new Error("密码长度不小于4位"));
 	} else if (value.length > 16) {
 		callback(new Error("密码长度不大于20位"));
@@ -66,33 +64,32 @@ const validatePass2 = (rule: any, value: any, callback: any) => {
 		callback();
 	}
 };
+
+
+
+
+
 const rules = reactive({
 	password: [{ validator: validatePass, trigger: "blur" }],
 	account: [{ validator: validatePass2, trigger: "blur" }],
 });
-
 const submitForm = (formEl: FormInstance | undefined) => {
 	if (!formEl) return
 	formEl.validate((valid) => {
 		if (valid) {
-			console.log(ruleForm);
 			LoginAdmin({ ...ruleForm }).then(res => {
 				ElMessage({
 					message: '恭喜！登录成功！',
 					type: 'success',
 					showClose: true
 				})
-				admintoken.value = res.data.admintoken
+				admintoken.value = res.data.token
 				localStorage.setItem("admintoken", admintoken.value)
-				adminInfo.value = {
-					account: res.data.adminaccount,
-					nickname: res.data.adminnickname,
-					usetime: res.data.usetime
-				}
-				adminInfoStore.account = adminInfo.value.account
-
-				router.push({ name: 'Home' })
-
+				adminInfoStore.account = res.data.adminaccount
+				adminInfoStore.nickname = res.data.adminnickname
+				adminInfoStore.usetime = res.data.usetime
+				adminInfoStore.route_list = JSON.parse(res.data.route_list)
+				router.replace({ name: 'Home' })
 			})
 		} else {
 			console.log('error submit!')

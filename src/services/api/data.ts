@@ -24,21 +24,21 @@ export function ForProLanguageMessage(query: any) {
 export function deleteLanguageMessage(data: any) {
   return request({
     url: '/data/languagemesstodel',
-    method: 'DELETE',
+    method: 'POST',
     data,
   })
 }
 export function deleteMovieMessage(data: any) {
   return request({
     url: '/data/deletemessage',
-    method: 'DELETE',
+    method: 'POST',
     data,
   })
 }
 export function deleteCityMessage(data: any) {
   return request({
-    url: '/data/languagemesstodel',
-    method: 'DELETE',
+    url: '/data/delethottravelcitymess',
+    method: 'POST',
     data,
   })
 }

@@ -18,18 +18,17 @@ import {
   VxeForm,
   VxeFormItem,
   VxeGrid,
-  VxeIcon,
   VxeInput,
   VxeList,
   VxeModal,
   VxeModuleEdit,
-  VxeModuleExport,
-  VxeModuleFilter, VxeModuleValidator, VxeOption,
+  VxeModuleFilter,
+  VxeModuleValidator,
+  VxeOption,
   VxePager,
   VxeRadio,
   VxeRadioGroup,
   VxeSelect,
-  VxeTable,
   VxeTextarea,
   VxeToolbar,
   VxeTooltip
@@ -53,7 +52,7 @@ function useTable(app: TaPP) {
     .use(Icon)
     .use(Column)
     .use(Table)
-    .use(VxeTable)
+    // .use(VxeTable)1
     .use(VxeGrid)
     .use(VxePager)
     .use(VxeInput)
@@ -66,13 +65,17 @@ function useTable(app: TaPP) {
     .use(VxeOption)
     .use(VxeModuleEdit)
     .use(VxeTooltip)
-    .use(VxeIcon)
+    // .use(VxeIcon)1
     .use(VxeModal)
     .use(VxeToolbar)
     .use(Keyboard)
     .use(VxeRadio)
     .use(VxeRadioGroup)
-    .use(VxeTextarea).use(VxeModuleValidator).use(Export).use(VxeModuleExport).use(VxeCheckbox)
+    .use(VxeTextarea)
+    .use(VxeModuleValidator)
+    .use(Export)
+    // .use(VxeModuleExport)1
+    .use(VxeCheckbox)
 }
 createApp(App)
   .use(router)

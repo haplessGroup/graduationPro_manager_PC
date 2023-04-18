@@ -1,4 +1,4 @@
-import request from '../request'
+import request from '../request';
 export function getRole(query: any) {
   return request({
     url: "/user/getrole",
@@ -7,6 +7,8 @@ export function getRole(query: any) {
   })
 }
 export function createRole(data: any) {
+  console.log(data);
+
   return request({
     url: "/user/createrole",
     method: 'POST',
@@ -18,5 +20,20 @@ export function deleteRole(data: any) {
     url: "/user/delrole",
     method: 'POST',
     data
+  })
+}
+export function updateRole(data) {
+  return request({
+    url: "/user/updaterole",
+    method: 'POST',
+    data
+  })
+}
+
+export function getRouteList(params) {
+  return request({
+    url: '/backend/routlist',
+    method: 'GET',
+    params
   })
 }

@@ -3,62 +3,61 @@
 	<div id="header" style="font-size: 30px;font-weight: bold;text-align: center;color: #708090;">
 		欢迎来到"零数据"分析平台管理系统
 		</div>
-	<!-- 分割线 -->
-	<el-divider></el-divider>
-	<!-- 四个板块 -->
-	<div id="acc" style="display: flex;">
-		<!-- 注册总人数 -->
-		<div class="block1">
-			目前平台共注册:{{ accountstatus.allacc }}人
-		</div>
-		<div class="block2">
-			正常状态:{{ accountstatus.normal }}人
-		</div>
-		<div style="background-color: #DCE10D;" class="block2">
-			警告状态:{{ accountstatus.warning }}人
-		</div>
-		<div style="background-color: #B90F0F;" class="block2">
-			禁用状态:{{ accountstatus.prohibition }}人
-		</div>
-	</div>
-	<!-- 用户注册量 -->
-	<div id="hi" style="text-align: center;" class="mt-20px">
-		<div class="data">
-			<h2 class="tit">一周用户注册量</h2>
-			<el-divider></el-divider>
-			<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
-			<div id="main1" style="width: 100%;height:300px;margin:30px auto 30px auto;"></div>
-		</div>
-		<!-- 处理账号量 -->
-		<div class="data" style="margin-left: 100px;">
-			<h2 class="tit">每日处理账号量</h2>
-			<el-divider></el-divider>
-			<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
-			<div id="main2" style="width: 100%;height:300px;margin:30px auto 30px auto;"></div>
-		</div>
-	</div>
-	<!-- 用户留言一览 -->
-	<div style="margin-top: 20px;height: 300px;" class="over" v-loading="loading">
-		<el-card class="box-card">
-			<template #header>
-				<div class="card-header">
-					<span style="font-weight: bold;font-family: '微软雅黑';font-size: 20px;color: #6495ED;">用户建议预览</span>
-					<el-button class="button" type="text" @click="gotoTreatAdvice">去处理</el-button>
-				</div>
-			</template>
-			<vxe-grid v-bind="gridOptions"></vxe-grid>
-		</el-card>
-	</div>
+						<!-- 分割线 -->
+						<el-divider></el-divider>
+						<!-- 四个板块 -->
+						<div id="acc" style="display: flex;">
+							<!-- 注册总人数 -->
+							<div class="block1">
+								目前平台共注册:{{ accountstatus.allacc }}人
+							</div>
+							<div class="block2">
+								正常状态:{{ accountstatus.normal }}人
+							</div>
+							<div style="background-color: #DCE10D;" class="block2">
+								警告状态:{{ accountstatus.warning }}人
+							</div>
+							<div style="background-color: #B90F0F;" class="block2">
+								禁用状态:{{ accountstatus.prohibition }}人
+							</div>
+						</div>
+						<!-- 用户注册量 -->
+						<div id="hi" style="text-align: center;" class="mt-20px">
+							<div class="data">
+								<h2 class="tit">一周用户注册量</h2>
+								<el-divider></el-divider>
+								<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+								<div id="main1" style="width: 100%;height:300px;margin:30px auto 30px auto;"></div>
+							</div>
+							<!-- 处理账号量 -->
+							<div class="data" style="margin-left: 100px;">
+								<h2 class="tit">各用户角色信息分布</h2>
+							<el-divider></el-divider>
+							<!-- 为 ECharts 准备一个定义了宽高的 DOM -->
+							<div id="main2" style="width: 100%;height:300px;margin:30px auto 30px auto;"></div>
+						</div>
+					</div>
+					<!-- 用户留言一览 -->
+					<div style="margin-top: 20px;height: 300px;" class="over" v-loading="loading">
+						<el-card class="box-card">
+							<template #header>
+								<div class="card-header">
+									<span style="font-weight: bold;font-family: '微软雅黑';font-size: 20px;color: #6495ED;">用户建议预览</span>
+									<el-button class="button" type="text" @click="gotoTreatAdvice">去处理</el-button>
+								</div>
+							</template>
+							<vxe-grid v-bind="gridOptions"></vxe-grid>
+						</el-card>
+					</div>
 </template>
 
 <script lang="ts" setup>
 import router from '@/router';
 import { ForAccountStatus, ForAllAdvice } from '@/services/api/user';
 import * as echarts from "echarts";
-import { ElMessage } from 'element-plus';
 import { VxeGridProps } from 'vxe-table';
 
-import { getweekData } from '@/services/api/chart';
+import { getRoleCount, getweekData } from '@/services/api/chart';
 import { nextTick, reactive, ref } from 'vue';
 export interface paramsQuer {
 	skip: number,
@@ -109,10 +108,9 @@ const showAccountStatus = () => {
 	})
 }
 // 一周用户注册量
-nextTick(() => {
-	showHistogram()
-	showHandlingAccount()
-})
+
+let dateTime = reactive<Array<string>>([])
+const dateCount = ref()
 const showHistogram = () => {
 	let chartDom = document.getElementById('main1') as HTMLElement;
 	let myChart = echarts.init(chartDom);
@@ -134,9 +132,13 @@ const showHistogram = () => {
 		xAxis: [
 			{
 				type: 'category',
-				data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+				data: dateTime,
 				axisTick: {
 					alignWithLabel: true
+				},
+				axisLabel: {
+					interval: 0,
+					rotate: 40
 				}
 			}
 		],
@@ -150,68 +152,103 @@ const showHistogram = () => {
 				name: '数量',
 				type: 'bar',
 				barWidth: '60%',
-				data: [30, 10, 20, 35, 23, 42, 19]
+				data: dateCount.value
 			}
 		]
 	};
 	option && myChart.setOption(option);
 }
+const getData = async () => {
+	const { data: oneData } = await getweekData()
+	dateTime = Object.keys(oneData[0])
+	dateCount.value = Object.values(oneData[0]).map((item) => { return item.length })
+	const { data } = await getRoleCount()
+	RoleCountInfo.value = data.pagination.map((item) => {
+		return { value: item.value, name: item.label }
+	})
+	nextTick(() => {
+		showHistogram()
+		showHandlingAccount()
+
+	})
+
+}
+getData()
+
 const showHandlingAccount = () => {
 	let chartDom = document.getElementById('main2') as HTMLElement;
 	let myChart = echarts.init(chartDom);
 	let option;
 
 	option = {
-		xAxis: {
-			type: 'category',
-			data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
+		tooltip: {
+			trigger: 'item'
 		},
-		yAxis: {
-			type: 'value'
+		legend: {
+			top: '5%',
+			left: 'center'
 		},
 		series: [
 			{
-				data: [2, 5, 1, 8, 3, 4, 5],
-				type: 'line'
+				name: 'Access From',
+				type: 'pie',
+				radius: ['40%', '70%'],
+				avoidLabelOverlap: false,
+				itemStyle: {
+					borderRadius: 10,
+					borderColor: '#fff',
+					borderWidth: 2
+				},
+				label: {
+					show: false,
+					position: 'center'
+				},
+				emphasis: {
+					label: {
+						show: true,
+						fontSize: 20,
+						fontWeight: 'bold'
+					}
+				},
+				labelLine: {
+					show: false
+				},
+				data: RoleCountInfo.value
 			}
 		]
 	};
 
 	option && myChart.setOption(option);
 }
+const RoleCountInfo = ref<Array<{ value: number, name: string }>>()
 
-const getData = () => {
-	getweekData().then((res) => {
-		console.log(res);
-	})
-}
-getData()
+
 // 从后台获取所有建议
-const showAllAdvice = () => {
-	let loading = true
-	ForAllAdvice(query).then(res => {
-		// console.log(res.data)
-		if (res.data == "no result") {
-			loading = false
-			ElMessage({
-				message: '暂无留言~',
-				type: 'warning',
-			})
-		} else if (res.data == "ERROR") {
-			loading = false
-			ElMessage.error('后台出现错误!')
-		} else {
-			loading = false
-			allAdvice.value = res.data.pagination
-		}
-	})
-}
+// const showAllAdvice = () => {
+// 	let loading = true
+// 	ForAllAdvice(query).then(res => {
+// 		// console.log(res.data)
+// 		if (res.data == "no result") {
+// 			loading = false
+// 			ElMessage({
+// 				message: '暂无留言~',
+// 				type: 'warning',
+// 			})
+// 		} else if (res.data == "ERROR") {
+// 			loading = false
+// 			ElMessage.error('后台出现错误!')
+// 		} else {
+// 			loading = false
+// 			allAdvice.value = res.data.pagination
+// 		}
+// 	})
+// }
 const gotoTreatAdvice = () => {
 	router.push("/treateadvice")
 }
 
-showAllAdvice(),
-	showAccountStatus()
+// showAllAdvice(),
+showAccountStatus()
 </script>
 
 <style scoped>

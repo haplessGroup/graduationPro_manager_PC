@@ -12,3 +12,9 @@ export function getweekData() {
     method: 'GET',
   })
 }
+export function getRoleCount() {
+  return request({
+    url: 'backend/rolecount',
+    method: 'GET'
+  })
+}

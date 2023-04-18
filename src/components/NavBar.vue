@@ -25,10 +25,12 @@
 
 <script lang="ts" setup>
 
+import router from '@/router';
+import { useAdminInfoStore } from '@/store';
 import useAppStore from '@/store/app';
 import useSettingsStore from '@/store/settings';
 import useUserStore from '@/store/user';
-import { ElMessageBox } from 'element-plus';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import Hamburger from './Hamburger/index.vue';
 const appStore = useAppStore()
 const userStore = useUserStore()
@@ -74,6 +76,7 @@ const removeAdminTokenAndAdmininfo = () => {
   // console.log("注销按钮被点击了")
   // console.log(this.adminInfo.nickname)
 }
+const adminInfoStore = useAdminInfoStore();
 function logout() {
 
   ElMessageBox.confirm('确定注销并退出系统吗？', '提示', {
@@ -81,7 +84,11 @@ function logout() {
     cancelButtonText: '取消',
     type: 'warning'
   }).then(() => {
-    location.href = '/index';
+    adminInfoStore.account = ""
+    adminInfoStore.nickname = ""
+    adminInfoStore.usetime = ""
+    adminInfoStore.route_list = null
+    router.replace('/login')
     // userStore.logOut().then(() => {
     // })
   }).catch(() => { });

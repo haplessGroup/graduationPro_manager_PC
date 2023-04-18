@@ -12,7 +12,7 @@ axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded'
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL:
-    (import.meta.env.VITE_BASE_URL as string) || 'http://10.50.20.209:8080/',
+    (import.meta.env.VITE_BASE_URL as string) || 'http://192.168.80.174:8000/',
   // 'http://gapi.lltanalysis.cn',
   // 超时
   timeout: 10000,
@@ -26,7 +26,7 @@ service.interceptors.request.use(
     // 是否需要防止数据重复提交
     const isRepeatSubmit = (config.headers || {}).repeatSubmit === false
     if (getToken() && !isToken) {
-      config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
+      config.headers['Authorization'] = getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     // // get请求映射params参数
     // if (config.method === 'get' && config.params) {

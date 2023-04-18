@@ -132,14 +132,14 @@ const deleteDate = (row: { laaccount: any; id: any; }) => {
 	deleteLanguageMessage({ account: row.laaccount, id: row.id }).then((res: any) => {
 		if (res.msg == "OK") {
 			ElMessage({
-				message: "提交成功!",
+				message: "删除成功!",
 				type: 'success',
 				showClose: true
 			})
 			findList()
 		} else if (res.msg == "failed") {
 			ElMessage({
-				message: "提交失败~",
+				message: "删除失败~",
 				type: 'error',
 				showClose: true
 			})
